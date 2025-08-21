@@ -1,0 +1,20 @@
+CREATE TABLE course_contents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    description TEXT,
+    subject TEXT NOT NULL,
+    grade_level TEXT NOT NULL,
+    teacher_id UUID NOT NULL REFERENCES auth.users(id),
+    class_id UUID,
+    content_type TEXT CHECK (content_type IN ('lesson',
+    'courseware',
+    'video',
+    'document')),
+    content_data JSONB,
+    difficulty_level INTEGER CHECK (difficulty_level BETWEEN 1 AND 5),
+    ai_generated BOOLEAN DEFAULT false,
+    tags TEXT[],
+    is_public BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

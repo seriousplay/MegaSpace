@@ -1,0 +1,23 @@
+CREATE TABLE file_uploads (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    filename VARCHAR(255) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    file_path TEXT NOT NULL,
+    file_size BIGINT NOT NULL,
+    mime_type VARCHAR(100),
+    uploader_id UUID REFERENCES user_profiles(id) ON DELETE CASCADE,
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    context_type VARCHAR(50) CHECK (context_type IN ('agent',
+    'knowledge_base',
+    'profile',
+    'organization')),
+    context_id UUID,
+    processing_status VARCHAR(20) DEFAULT 'pending' CHECK (processing_status IN ('pending',
+    'processing',
+    'completed',
+    'failed')),
+    extracted_text TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);

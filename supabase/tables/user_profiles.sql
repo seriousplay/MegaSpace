@@ -1,0 +1,22 @@
+CREATE TABLE user_profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    full_name VARCHAR(255),
+    role VARCHAR(50) NOT NULL CHECK (role IN ('super_admin',
+    'school_admin',
+    'teacher',
+    'student',
+    'parent')),
+    organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
+    avatar_url TEXT,
+    phone VARCHAR(50),
+    grade_level VARCHAR(20),
+    subject_areas TEXT[],
+    bio TEXT,
+    preferences JSONB DEFAULT '{}',
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active',
+    'inactive',
+    'pending')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);

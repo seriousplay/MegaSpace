@@ -1,0 +1,20 @@
+CREATE TABLE notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    sender_id UUID NOT NULL REFERENCES auth.users(id),
+    target_audience TEXT CHECK (target_audience IN ('all',
+    'teachers',
+    'students',
+    'parents',
+    'class')),
+    target_class_id UUID,
+    priority_level TEXT CHECK (priority_level IN ('low',
+    'medium',
+    'high',
+    'urgent')),
+    is_published BOOLEAN DEFAULT false,
+    scheduled_at TIMESTAMP WITH TIME ZONE,
+    expires_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

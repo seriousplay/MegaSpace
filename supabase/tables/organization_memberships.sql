@@ -1,0 +1,20 @@
+CREATE TABLE organization_memberships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES user_profiles(id) ON DELETE CASCADE,
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('admin',
+    'teacher',
+    'student',
+    'parent',
+    'viewer')),
+    permissions JSONB DEFAULT '{}',
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active',
+    'inactive',
+    'pending',
+    'rejected')),
+    invited_by UUID REFERENCES user_profiles(id),
+    invited_at TIMESTAMPTZ,
+    joined_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
